@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 import gradio as gr
 
-# Dodanie katalogu agenta do ścieżki systemowej
 sys.path.insert(0, str(Path(__file__).parent / "agent"))
 
 try:
@@ -13,6 +12,7 @@ except KeyError as exc:
     CONFIGURATION_ERROR = f"Brakuje sekretu: {exc.args[0]}"
 else:
     CONFIGURATION_ERROR = None
+
 
 def text_content(content):
     if isinstance(content, str):
@@ -24,22 +24,23 @@ def text_content(content):
         )
     return str(content)
 
+
 def respond(message, history):
     if CONFIGURATION_ERROR:
         return f"{CONFIGURATION_ERROR}. Ustaw go w Settings → Secrets i uruchom Space ponownie."
     
     agent = ESP32Agent()
-    # Przeniesienie historii czatu do formatu obsługiwanego przez agenta
     agent.messages.extend(
         {
             "role": item["role"],
             "content": text_content(item["content"]),
         }
-        for item in history if item["role"] in {"user", "assistant"}
+        for item in history
+        if item["role"] in {"user", "assistant"}
     )
     return agent.chat(message)
 
-# Definicja interfejsu graficznego Gradio
+
 demo = gr.ChatInterface(
     respond,
     title="ESP32 AI Agent",
@@ -50,5 +51,5 @@ demo = gr.ChatInterface(
 if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0",
-        server_port=int(os.getenv("PORT", "7860"))
+        server_port=int(os.getenv("PORT", "7860")),
     )
