@@ -1,5 +1,5 @@
-const char* WIFI_SSID = "UP-WiFi";
-const char* WIFI_PASSWORD = "0987654321!";
+const char* WIFI_SSID = "Galaxy A22 5G807e";
+const char* WIFI_PASSWORD = "ivmb7349";
  
 const char* MQTT_HOST = "k20f99f1.ala.us-east-1.emqxsl.com";
 const int MQTT_PORT = 8883;
